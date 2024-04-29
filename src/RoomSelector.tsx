@@ -8,7 +8,7 @@ export function RoomSelector({
   currentRoomId,
   onRoomChange
 }: {
-  rooms: Schema["Room"][],
+  rooms: Schema["Room"]["type"][],
   currentRoomId: string,
   onRoomChange: (roomId: string) => void
 }) {
@@ -26,7 +26,10 @@ export function RoomSelector({
       const { data: room } = await client.models.Room.create({
         topic: newRoomName
       })
-      onRoomChange(room.id)
+      
+      if (room !== null) {
+        onRoomChange(room.id)
+      }
     }}>[+ add]</button>
   </>
 }

@@ -10,7 +10,7 @@ type PictureManagerProps = {
 const client = generateClient<Schema>()
 
 export function PictureManager({ roomId }: PictureManagerProps) {
-  const [pictures, setPictures] = useState<Schema["Picture"][]>([])
+  const [pictures, setPictures] = useState<Schema["Picture"]["type"][]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [haiku, setHaiku] = useState<string>()
 
@@ -71,7 +71,9 @@ export function PictureManager({ roomId }: PictureManagerProps) {
 
       <button onClick={async () => {
         const { data } = await client.queries.generateHaiku({ roomId })
-        setHaiku(data)
+        if (data !== null) {
+          setHaiku(data)
+        }
       }}>Generate Haiku</button>
     </div>
   </>

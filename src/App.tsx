@@ -16,17 +16,18 @@ function generateRandomEmoji() {
 
 const client = generateClient<Schema>()
 
-const defaultRoom: Schema["Room"] = {
+const defaultRoom = {
   id: "default",
   topic: "default",
   createdAt: "",
-  updatedAt: ""
-}
+  updatedAt: "",
+  pictures: async () => ({ data: [] })
+} satisfies Schema["Room"]["type"]
 
 function App() {
   const [username, setUsername] = useState<string>(generateRandomEmoji())
   const [currentRoomId, setCurrentRoomId] = useState<string>("default")
-  const [rooms, setRooms] = useState<Schema["Room"][]>([defaultRoom])
+  const [rooms, setRooms] = useState<Schema["Room"]["type"][]>([defaultRoom])
   
   useEffect(() => {
     const sub = client.models.Room.observeQuery().subscribe({

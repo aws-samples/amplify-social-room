@@ -3,7 +3,7 @@ import { RoomSelector } from "./RoomSelector";
 
 export function ControlPanel(props: {
   currentRoomId: string,
-  rooms: Schema["Room"][],
+  rooms: Schema["Room"]["type"][],
   onRoomChange: (roomId: string) => void,
   username: string,
   onUsernameChange: React.MouseEventHandler<HTMLButtonElement>,

@@ -13,14 +13,14 @@
     "@aws-amplify/ui-react": "^6.1.8",
     "@aws-sdk/client-bedrock-runtime": "^3.564.0",
     "@aws-sdk/client-s3": "^3.564.0",
-    "aws-amplify": "^6.1.5-unstable.89ecc6d.0",
+    "aws-amplify": "^6.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "throttle-debounce": "^5.0.0"
   },
   "devDependencies": {
-    "@aws-amplify/backend": "^0.13.3",
-    "@aws-amplify/backend-cli": "^0.14.0",
+    "@aws-amplify/backend": "^0.15.0",
+    "@aws-amplify/backend-cli": "^0.15.0",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@types/throttle-debounce": "^5.0.2",
