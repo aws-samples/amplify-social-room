@@ -2,9 +2,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
 }
-
 
 .info-panel {
   width: 100%;
@@ -46,7 +44,7 @@
   font-size: inherit;
 }
 
-.control-panel select>option {
+.control-panel select > option {
   width: auto;
 }
 
@@ -59,6 +57,7 @@
 }
 
 .cursor-panel {
+  text-align: center;
   background: linear-gradient(135deg, rgb(117, 81, 194), rgb(255, 255, 255));
   position: absolute;
   top: 0;
@@ -67,6 +66,13 @@
   bottom: 0;
   user-select: none;
   overflow: hidden;
+}
+
+.picture-layout {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .cursor {
@@ -88,9 +94,13 @@
 
 .picture-gallery {
   display: flex;
+  flex-direction: column;
   gap: 12px;
-  padding: 12px 0;
+  padding: 2rem;
   flex-wrap: wrap;
+  border: 1px solid black;
+  border-radius: 1rem;
+  margin: 1rem auto;
 }
 
 .picture-img {
