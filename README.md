@@ -1,6 +1,6 @@
 ## AWS Amplify Fullstack Realtime Social Room Demo
 
-A React and Vite app using AWS Amplify to build a realtime game with generative AI, auth, data, storage, and serverless funcitons
+A React and Vite app using AWS Amplify to build a realtime game with generative AI, auth, data, storage, and serverless functions
 
 ## Getting Started
 ### Clone repo
