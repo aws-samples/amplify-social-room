@@ -1,11 +1,42 @@
-## My Project
+## AWS Amplify Fullstack Realtime Social Room Demo
 
-TODO: Fill this README out!
+A React and Vite app using AWS Amplify to build a realtime game with generative AI, auth, data, storage, and serverless funcitons
 
-Be sure to:
+## Getting Started
+### Clone repo
 
-* Change the title in this README
-* Edit your repository description on GitHub
+```
+
+git clone https://github.com/aws-samples/amplify-social-room.git
+cd amplify-social-room
+
+```
+
+### Install the packages
+
+```
+
+npm i
+
+```
+
+### Initiate a cloud sandbox environment
+
+```
+
+npx ampx sandbox
+
+```
+
+### Run the App
+
+```
+
+npm run dev
+
+```
+
+
 
 ## Security
 
