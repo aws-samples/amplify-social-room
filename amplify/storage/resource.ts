@@ -6,7 +6,7 @@ export const storage = defineStorage({
   access: allow => ({
     'room/*': [
       allow.authenticated.to(['get', 'write', 'delete']),
-      allow.guest.to(['get', 'write', 'delete']),
+      allow.guest.to(['get']),
       allow.resource(generateHaiku).to(['read'])
     ]
   })

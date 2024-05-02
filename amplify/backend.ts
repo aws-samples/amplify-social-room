@@ -16,6 +16,7 @@ const backend = defineBackend({
   generateHaiku
 });
 
+// Override generated resources
 backend.storage.resources.cfnResources.cfnBucket.lifecycleConfiguration = {
   rules: [{
     expirationInDays: 1,
@@ -24,6 +25,7 @@ backend.storage.resources.cfnResources.cfnBucket.lifecycleConfiguration = {
   }]
 }
 
+// Add net-new resources
 backend.generateHaiku.resources.lambda.addToRolePolicy(
   new PolicyStatement({
     effect: Effect.ALLOW,

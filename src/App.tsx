@@ -1,43 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
-import { generateClient } from 'aws-amplify/data'
-import type { Schema } from '../amplify/data/resource'
 import { ControlPanel } from './ControlPanel'
 import { CursorPanel } from './CursorPanel'
 import { PictureManager } from './PictureManager'
-
-function generateRandomEmoji() {
-  // Array of emojis
-  const emojis = ['😀', '😊', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😇', '😈', '🤡', '👿', '😉', '😊', '😋', '😌', '😍', '😎', '🥰', '😘', '😗', '😙', '😚', '☺️', '🙂', '🤗', '🤩', '🤔', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '🥴', '😵', '🤯', '🤠', '🥳', '😎', '😇', '🤑', '🤠', '🤡', '🥳', '🥸', '😈', '👿', '👹', '👺', '🤖', '💀', '👻', '👽', '👾', '🤖', '💩', '🙊', '💋', '💘', '💝', '💖', '💗', '💓', '💞', '💕', '💟', '❣️', '💔', '❤️', '🧡', '💛', '💚', '💙', '💜', '🤎', '🖤', '🤍', '💯', '💢', '💥', '💫', '💦', '💨', '🐵', '🐒', '🦍', '🦧', '🐶', '🐕', '🦮', '🐕‍🦺', '🐩', '🐺', '🦊', '🦝', '🐱', '🐈', '🐈‍⬛', '🦁', '🐯', '🐅', '🐆', '🐴', '🐎', '🦄', '🦓', '🦌', '🐮', '🐂', '🐃', '🐄', '🐷', '🐖', '🐗', '🐽', '🐏', '🐑', '🐐', '🐪', '🐫', '🦙', '🦒', '🐘', '🦏', '🦛', '🐭', '🐁', '🐀', '🐹', '🐰', '🐇', '🐿️', '🦔', '🦇', '🐻', '🐨', '🐼', '🦥', '🦦', '🦨', '🦘', '🦡', '🐾', '🦃', '🐔', '🐓', '🐣', '🐤', '🐥', '🐦', '🐧', '🕊️', '🦅', '🦆', '🦢', '🦉', '🦚', '🦜', '🐸', '🐊', '🐢', '🦎', '🐍', '🐲', '🐉', '🦕', '🦖', '🐳', '🐋', '🐬', '🐟', '🐠', '🐡', '🦈', '🐙', '🐚', '🦀', '🦞', '🦐', '🦑', '🐌', '🦋', '🐛', '🐜', '🐝', '🐞', '🦗', '🕷️', '🕸️', '🦂', '💐', '🌸', '💮', '🏵️', '🌹', '🥀', '🌺', '🌻', '🌼', '🌷', '🌱', '🌲', '🌳', '🌴', '🌵', '🌾', '🌿', '☘️', '🍀', '🍁', '🍂', '🍃', '🍇', '🍈', '🍉', '🍊', '🍋', '🍌', '🍍', '🥭', '🍎', '🍏', '🍐', '🍑', '🍒', '🍓', '🥝', '🍅', '🥥', '🥑', '🍆', '🥔', '🥕', '🌽', '🌶️', '🫑', '🥒', '🥬', '🥦', '🧄', '🧅', '🍄', '🥜', '🌰', '🍞', '🥐', '🥖', '🫓', '🥨', '🥯', '🥞', '🧇', '🧀', '🍖', '🍗', '🥩', '🥓', '🍔', '🍟', '🍕', '🌭', '🍿', '🧂', '🥫', '🍱', '🍘', '🍙', '🍚', '🍛', '🍜', '🍝', '🍠', '🍢', '🍣', '🍤', '🍥', '🥮', '🍡', '🥟', '🥠', '🥡', '🦀', '🦞', '🦐', '🦑', '🦪', '🍦', '🍧', '🍨', '🍩', '🍪', '🎂']
-  const randomIndex = Math.floor(Math.random() * emojis.length);
-  // Return the item at the randomly generated index
-  return emojis[randomIndex];
-}
-
-const client = generateClient<Schema>()
-
-const defaultRoom = {
-  id: "default",
-  topic: "default",
-  createdAt: "",
-  updatedAt: "",
-  pictures: async () => ({ data: [] })
-} satisfies Schema["Room"]["type"]
+import { defaultRoom, generateRandomEmoji } from './utils'
 
 function App() {
   const [username, setUsername] = useState<string>(generateRandomEmoji())
-  const [currentRoomId, setCurrentRoomId] = useState<string>("default")
-  const [rooms, setRooms] = useState<Schema["Room"]["type"][]>([defaultRoom])
+  const [currentRoomId, setCurrentRoomId] = useState<string>(defaultRoom.id)
   
-  useEffect(() => {
-    const sub = client.models.Room.observeQuery().subscribe({
-      next: (data) => {
-        setRooms([defaultRoom, ...data.items])
-      }
-    })
-    return () => sub.unsubscribe()
-  }, [])
-
   return (
     <>
       <div className='cursor-panel'>
@@ -53,7 +24,6 @@ function App() {
       </div>
       <ControlPanel
         currentRoomId={currentRoomId}
-        rooms={rooms}
         username={username}
         onRoomChange={setCurrentRoomId}
         onUsernameChange={() => setUsername(generateRandomEmoji())}
