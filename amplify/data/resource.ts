@@ -37,12 +37,25 @@ const schema = a.schema({
     .handler(a.handler.custom({
       entry: './subscribeCursor.js'
     })),
+
+  Haiku: a.customType({
+    content: a.string().required(),
+    roomId: a.id().required()
+  }),
   
-  generateHaiku: a.query()
-    .arguments({ roomId: a.string() })
-    .returns(a.string())
+  generateHaiku: a.mutation()
+    .arguments({ roomId: a.string().required() })
+    .returns(a.ref('Haiku'))
     .authorization(allow => [allow.publicApiKey()])
-    .handler(a.handler.function(generateHaiku))
+    .handler(a.handler.function(generateHaiku)),
+
+  onGenerateHaiku: a.subscription()
+    .arguments({ roomId: a.string().required() })
+    .for(a.ref('generateHaiku'))
+    .authorization(allow => [allow.publicApiKey()])
+    .handler(a.handler.custom({
+      entry: './onGenerateHaiku.js'
+    }))
 
 }).authorization((allow) => [allow.publicApiKey()]);
 

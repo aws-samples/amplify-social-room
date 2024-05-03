@@ -54,11 +54,8 @@ export const handler: Schema["generateHaiku"]["functionHandler"] = async (contex
 
   const result = await bedrockClient.send(new InvokeModelCommand(input))
 
-  return JSON.parse(Buffer.from(result.body).toString()).content[0].text
+  return {
+    content: JSON.parse(Buffer.from(result.body).toString()).content[0].text ?? "",
+    roomId: context.arguments.roomId
+  }
 }
-
-
-
-// files.map(file => file.Body?.transformToString('base64'))
-
-// return JSON.stringify(files)

@@ -16,7 +16,7 @@ export function PictureManager({ roomId }: PictureManagerProps) {
   const [haiku, setHaiku] = useState<string>();
 
   useEffect(() => {
-    const sub = client.models.Picture.observeQuery({
+    const roomSub = client.models.Picture.observeQuery({
       filter: {
         roomId: {
           eq: roomId,
@@ -28,7 +28,16 @@ export function PictureManager({ roomId }: PictureManagerProps) {
       },
     });
 
-    return () => sub.unsubscribe();
+    const haikuSub = client.subscriptions.onGenerateHaiku({
+      roomId
+    }).subscribe({
+      next: (value) => value && setHaiku(value.content)
+    })
+
+    return () => {
+      roomSub.unsubscribe();
+      haikuSub.unsubscribe()
+    }
   }, [roomId]);
 
   useEffect(() => {
@@ -47,15 +56,17 @@ export function PictureManager({ roomId }: PictureManagerProps) {
     <>
       {imageUrls.length > 0 ? (
         <div className="picture-gallery">
-          <Heading level={2}>Uploaded Pictures</Heading>
+          <div>Uploaded pictures</div>
           <Flex justifyContent={"space-evenly"}>
             {imageUrls.map((url) => (
               <img key={url} className="picture-img" src={url} />
             ))}
           </Flex>
           {haiku && (
-            <Heading level={4} margin={"1rem"}>
-              {haiku}
+            <Heading level={4} margin={"1rem"} textAlign={'start'}>
+              {haiku
+                .split(/([,.])/)
+                .map(value => value === ',' || value === '.' ? [value, <br />] : [value])}
             </Heading>
           )}
         </div>
@@ -110,12 +121,12 @@ export function PictureManager({ roomId }: PictureManagerProps) {
           backgroundColor="white"
           color="black"
           onClick={async () => {
-            const { data, errors } = await client.queries.generateHaiku({
+            const { data, errors } = await client.mutations.generateHaiku({
               roomId,
             });
             console.log("errors", errors);
             if (data !== null) {
-              setHaiku(data);
+              setHaiku(data.content);
             }
           }}
         >
