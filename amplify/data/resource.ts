@@ -14,22 +14,6 @@ const schema = a.schema({
 
   Cursor: a.customType(cursorType),
 
-  publishCursor: a.mutation()
-    .arguments(cursorType)
-    .returns(a.ref('Cursor'))
-    .authorization(allow => [allow.authenticated()])
-    .handler(a.handler.custom({
-      entry: './publishCursor.js',
-    })),
-  
-  subscribeCursor: a.subscription()
-    .for(a.ref('publishCursor'))
-    .arguments({ roomId: a.string(), myUsername: a.string() })
-    .authorization(allow => [allow.authenticated()])
-    .handler(a.handler.custom({
-      entry: './subscribeCursor.js'
-    })),
-
 }).authorization((allow) => [allow.authenticated()]);
 
 export type Schema = ClientSchema<typeof schema>;
