@@ -2,7 +2,7 @@ import { getUrl, remove, uploadData } from "aws-amplify/storage";
 import { useEffect, useState } from "react";
 import { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/api";
-import { Button, Flex, Heading } from "@aws-amplify/ui-react";
+import { Button, Flex } from "@aws-amplify/ui-react";
 
 type PictureManagerProps = {
   roomId: string;
@@ -13,7 +13,6 @@ const client = generateClient<Schema>();
 export function PictureManager({ roomId }: PictureManagerProps) {
   const [pictures, setPictures] = useState<Schema["Picture"]["type"][]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [haiku, setHaiku] = useState<string>();
 
   useEffect(() => {
     const roomSub = client.models.Picture.observeQuery({
@@ -28,15 +27,8 @@ export function PictureManager({ roomId }: PictureManagerProps) {
       },
     });
 
-    const haikuSub = client.subscriptions.onGenerateHaiku({
-      roomId
-    }).subscribe({
-      next: (value) => value && setHaiku(value.content)
-    })
-
     return () => {
       roomSub.unsubscribe();
-      haikuSub.unsubscribe()
     }
   }, [roomId]);
 
@@ -62,13 +54,6 @@ export function PictureManager({ roomId }: PictureManagerProps) {
               <img key={url} className="picture-img" src={url} />
             ))}
           </Flex>
-          {haiku && (
-            <Heading level={4} margin={"1rem"} textAlign={'start'}>
-              {haiku
-                .split(/([,.])/)
-                .map(value => value === ',' || value === '.' ? [value, <br />] : [value])}
-            </Heading>
-          )}
         </div>
       ) : null}
 
@@ -110,27 +95,9 @@ export function PictureManager({ roomId }: PictureManagerProps) {
             await Promise.all(
               pictures.map((item) => client.models.Picture.delete(item))
             );
-            setHaiku("");
           }}
         >
           Clear files
-        </Button>
-
-        <Button
-          variation="primary"
-          backgroundColor="white"
-          color="black"
-          onClick={async () => {
-            const { data, errors } = await client.mutations.generateHaiku({
-              roomId,
-            });
-            console.log("errors", errors);
-            if (data !== null) {
-              setHaiku(data.content);
-            }
-          }}
-        >
-          Generate Haiku
         </Button>
       </div>
     </>
