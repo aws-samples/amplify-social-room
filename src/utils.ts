@@ -5,7 +5,7 @@ export const defaultRoom = {
   topic: "default",
   createdAt: "",
   updatedAt: "",
-  pictures: async () => ({ data: [] })
+  // pictures: async () => ({ data: [] })
 } satisfies Schema["Room"]["type"]
 
 
